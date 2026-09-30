@@ -1,0 +1,2 @@
+type Props={dark:boolean;count:number;onTheme:()=>void;onCart:()=>void};
+export function Header({dark,count,onTheme,onCart}:Props){return <header className="header"><div className="shell header-inner"><a href="#" className="logo">BURGER<span>HOUSE</span></a><div className="actions"><button className="icon" onClick={onTheme} aria-label="Alternar tema">{dark?"☀️":"🌙"}</button><button className="icon" onClick={onCart} aria-label={`Carrinho com ${count} itens`}>🛒{count>0&&<b className="badge">{count}</b>}</button></div></div></header>}
