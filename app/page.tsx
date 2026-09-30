@@ -1,17 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-const products = [
-  { id: 1, name: "X-Bacon Especial", description: "Pão brioche, carne 180g, bacon crocante, cheddar e molho da casa.", price: 29.9, emoji: "🍔", tag: "Mais pedido" },
-  { id: 2, name: "Smash Duplo", description: "Dois smash burgers, queijo, cebola caramelizada e molho especial.", price: 32.9, emoji: "🍔", tag: "Novo" },
-  { id: 3, name: "Batata Suprema", description: "Batata crocante com cheddar cremoso e bacon.", price: 22.9, emoji: "🍟", tag: "Promoção" },
-  { id: 4, name: "Combo da Casa", description: "Burger clássico, batata crocante e refrigerante gelado.", price: 39.9, emoji: "🥤", tag: "Combo" },
-];
+import { useEffect, useMemo, useState } from "react";
+import { ProductModal } from "../components/ProductModal";
+import { products } from "../lib/products";
+import type { CartItem, Product } from "../lib/types";
 
 export default function Home() {
   const [dark, setDark] = useState(true);
-  const [cartCount, setCartCount] = useState(0);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const cartCount = useMemo(() => cart.reduce((total, item) => total + item.quantity, 0), [cart]);
+  const cartTotal = useMemo(() => cart.reduce((total, item) => total + item.price * item.quantity, 0), [cart]);
+
+  function addToCart(product: Product, quantity = 1) {
+    setCart((current) => {
+      const found = current.find((item) => item.id === product.id);
+      if (found) return current.map((item) => item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item);
+      return [...current, { ...product, quantity }];
+    });
+    setSelectedProduct(null);
+  }
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
@@ -74,7 +82,7 @@ export default function Home() {
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {products.map((product, index) => (
-            <article key={product.id} className="product-card reveal" style={{ animationDelay: `${index * 80}ms` }}>
+            <article key={product.id} className="product-card reveal" style={{ animationDelay: `${index * 80}ms` }} onClick={() => setSelectedProduct(product)}>
               <div className="product-image" aria-hidden="true"><span>{product.emoji}</span></div>
               <div className="min-w-0 flex-1 py-1">
                 <span className="tag">{product.tag}</span>
@@ -82,7 +90,7 @@ export default function Home() {
                 <p className="mt-1 line-clamp-2 text-sm leading-5 text-[var(--muted)]">{product.description}</p>
                 <div className="mt-4 flex items-center justify-between gap-3">
                   <strong className="text-lg">R$ {product.price.toFixed(2).replace(".", ",")}</strong>
-                  <button onClick={() => setCartCount((value) => value + 1)} className="add-button" aria-label={`Adicionar ${product.name} ao carrinho`}>+</button>
+                  <button onClick={(event) => { event.stopPropagation(); addToCart(product); }} className="add-button" aria-label={`Adicionar ${product.name} ao carrinho`}>+</button>
                 </div>
               </div>
             </article>
@@ -90,10 +98,12 @@ export default function Home() {
         </div>
       </section>
 
+      {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAdd={addToCart} />}
+
       {cartCount > 0 && (
         <div className="fixed inset-x-0 bottom-4 z-50 px-4">
           <button className="cart-bar mx-auto flex w-full max-w-xl items-center justify-between">
-            <span><b>{cartCount}</b> {cartCount === 1 ? "item" : "itens"}</span><strong>Ver carrinho →</strong>
+            <span><b>{cartCount}</b> {cartCount === 1 ? "item" : "itens"} · R$ {cartTotal.toFixed(2).replace(".", ",")}</span><strong>Ver carrinho →</strong>
           </button>
         </div>
       )}
