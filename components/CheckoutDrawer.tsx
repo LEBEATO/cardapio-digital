@@ -6,7 +6,7 @@ import type { CartItem } from "../lib/types";
 type Props = {
   items: CartItem[];
   onClose: () => void;
-  onQuantity: (id: number, quantity: number) => void;
+  onQuantity: (cartKey: string, quantity: number) => void;
   onClear: () => void;
 };
 
@@ -23,7 +23,7 @@ export function CheckoutDrawer({ items, onClose, onQuantity, onClear }: Props) {
   const [notes, setNotes] = useState("");
   const [error, setError] = useState("");
 
-  const subtotal = useMemo(() => items.reduce((sum, item) => sum + item.price * item.quantity, 0), [items]);
+  const subtotal = useMemo(() => items.reduce((sum, item) => sum + (item.price + item.selectedAddOns.reduce((extra, addOn) => extra + addOn.price, 0)) * item.quantity, 0), [items]);
   const deliveryFee = delivery === "delivery" ? 5 : 0;
   const total = subtotal + deliveryFee;
 
@@ -35,7 +35,7 @@ export function CheckoutDrawer({ items, onClose, onQuantity, onClear }: Props) {
     if (delivery === "delivery" && !cleanAddress) return setError("Informe o endereço de entrega.");
     if (!WHATSAPP_NUMBER) return setError("O WhatsApp da loja ainda precisa ser configurado.");
 
-    const lines = items.map((item) => `• ${item.quantity}x ${item.name} — R$ ${(item.price * item.quantity).toFixed(2).replace(".", ",")}`);
+    const lines = items.flatMap((item) => { const unit = item.price + item.selectedAddOns.reduce((sum, addOn) => sum + addOn.price, 0); return [`• ${item.quantity}x ${item.name} — R$ ${(unit * item.quantity).toFixed(2).replace(".", ",")}`, ...item.selectedAddOns.map((addOn) => `   + ${addOn.name}`), item.notes ? `   Obs.: ${item.notes}` : ""].filter(Boolean); });
     const method = payment === "pix" ? "PIX" : payment === "card" ? "Cartão" : "Dinheiro";
     const message = [
       "🍔 *NOVO PEDIDO — BURGER HOUSE*",
@@ -66,13 +66,13 @@ export function CheckoutDrawer({ items, onClose, onQuantity, onClear }: Props) {
 
         <div className="mt-5 grid gap-3">
           {items.map((item) => (
-            <div className="cart-item" key={item.id}>
+            <div className="cart-item" key={item.cartKey}>
               <span className="text-3xl" aria-hidden="true">{item.emoji}</span>
-              <div className="min-w-0 flex-1"><b className="block truncate">{item.name}</b><span className="text-sm text-[var(--muted)]">R$ {item.price.toFixed(2).replace(".", ",")}</span></div>
+              <div className="min-w-0 flex-1"><b className="block truncate">{item.name}</b><span className="text-sm text-[var(--muted)]">R$ {(item.price + item.selectedAddOns.reduce((sum, addOn) => sum + addOn.price, 0)).toFixed(2).replace(".", ",")}</span>{item.selectedAddOns.length > 0 && <small className="block text-[var(--muted)]">{item.selectedAddOns.map((a) => a.name).join(", ")}</small>}{item.notes && <small className="block text-[var(--muted)]">Obs.: {item.notes}</small>}</div>
               <div className="qty">
-                <button onClick={() => onQuantity(item.id, item.quantity - 1)} aria-label={`Diminuir ${item.name}`}>−</button>
+                <button onClick={() => onQuantity(item.cartKey, item.quantity - 1)} aria-label={`Diminuir ${item.name}`}>−</button>
                 <b>{item.quantity}</b>
-                <button onClick={() => onQuantity(item.id, item.quantity + 1)} aria-label={`Aumentar ${item.name}`}>+</button>
+                <button onClick={() => onQuantity(item.cartKey, item.quantity + 1)} aria-label={`Aumentar ${item.name}`}>+</button>
               </div>
             </div>
           ))}
