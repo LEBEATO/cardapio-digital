@@ -76,3 +76,12 @@ button { cursor: pointer; }
 .safe-note { margin-top:9px; text-align:center; color:var(--muted); font-size:11px; line-height:16px; }
 @keyframes drawer-in { from { opacity:0; transform:translateX(50px); } }
 @media (max-width:520px) { .checkout-drawer { width:100%; border-left:0; } .choice-grid.three { grid-template-columns:1fr; } }
+
+.option-section { margin-top:22px; padding-top:18px; border-top:1px solid var(--border); }
+.addon-list { display:grid; gap:8px; margin-top:12px; }
+.addon { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:12px; border:1px solid var(--border); border-radius:14px; background:var(--surface-2); color:var(--foreground); text-align:left; }
+.addon small { display:block; margin-top:2px; color:var(--muted); }
+.addon.active { border-color:var(--brand); background:color-mix(in srgb,var(--brand) 10%,var(--surface)); }
+.check { width:28px; height:28px; flex:0 0 auto; display:grid; place-items:center; border-radius:9px; background:var(--surface); color:var(--brand); font-weight:900; }
+.modal-footer { position:sticky; bottom:-20px; display:flex; gap:10px; margin:22px -20px -20px; padding:14px 20px 20px; border-top:1px solid var(--border); background:var(--surface); }
+.qty.large button { width:38px; height:38px; }
