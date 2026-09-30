@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ProductModal } from "../components/ProductModal";
+import { CheckoutDrawer } from "../components/CheckoutDrawer";
 import { products } from "../lib/products";
 import type { CartItem, Product } from "../lib/types";
 
@@ -9,6 +10,7 @@ export default function Home() {
   const [dark, setDark] = useState(true);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
   const cartCount = useMemo(() => cart.reduce((total, item) => total + item.quantity, 0), [cart]);
   const cartTotal = useMemo(() => cart.reduce((total, item) => total + item.price * item.quantity, 0), [cart]);
 
@@ -19,6 +21,10 @@ export default function Home() {
       return [...current, { ...product, quantity }];
     });
     setSelectedProduct(null);
+  }
+
+  function updateQuantity(id: number, quantity: number) {
+    setCart((current) => quantity <= 0 ? current.filter((item) => item.id !== id) : current.map((item) => item.id === id ? { ...item, quantity } : item));
   }
 
   useEffect(() => {
@@ -41,7 +47,7 @@ export default function Home() {
           </a>
           <div className="flex items-center gap-2">
             <button onClick={() => setDark(!dark)} className="icon-button" aria-label={dark ? "Ativar modo claro" : "Ativar modo escuro"}>{dark ? "☀️" : "🌙"}</button>
-            <button className="icon-button relative" aria-label={`Carrinho com ${cartCount} itens`}>🛒{cartCount > 0 && <span className="cart-badge">{cartCount}</span>}</button>
+            <button onClick={() => cartCount > 0 && setCartOpen(true)} className="icon-button relative" aria-label={`Carrinho com ${cartCount} itens`}>🛒{cartCount > 0 && <span className="cart-badge">{cartCount}</span>}</button>
           </div>
         </div>
       </header>
@@ -99,10 +105,11 @@ export default function Home() {
       </section>
 
       {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} onAdd={addToCart} />}
+      {cartOpen && cartCount > 0 && <CheckoutDrawer items={cart} onClose={() => setCartOpen(false)} onQuantity={updateQuantity} onClear={() => { setCart([]); setCartOpen(false); }} />}
 
       {cartCount > 0 && (
         <div className="fixed inset-x-0 bottom-4 z-50 px-4">
-          <button className="cart-bar mx-auto flex w-full max-w-xl items-center justify-between">
+          <button onClick={() => setCartOpen(true)} className="cart-bar mx-auto flex w-full max-w-xl items-center justify-between">
             <span><b>{cartCount}</b> {cartCount === 1 ? "item" : "itens"} · R$ {cartTotal.toFixed(2).replace(".", ",")}</span><strong>Ver carrinho →</strong>
           </button>
         </div>
