@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ProductModal } from "../components/ProductModal";
 import { CheckoutDrawer } from "../components/CheckoutDrawer";
 import { products } from "../lib/products";
-import type { CartItem, Product } from "../lib/types";
+import type { CartItem, Product, SelectedAddOn } from "../lib/types";
 
 export default function Home() {
   const [dark, setDark] = useState(true);
@@ -12,19 +12,21 @@ export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const cartCount = useMemo(() => cart.reduce((total, item) => total + item.quantity, 0), [cart]);
-  const cartTotal = useMemo(() => cart.reduce((total, item) => total + item.price * item.quantity, 0), [cart]);
+  const cartTotal = useMemo(() => cart.reduce((total, item) => total + (item.price + item.selectedAddOns.reduce((sum, addOn) => sum + addOn.price, 0)) * item.quantity, 0), [cart]);
 
-  function addToCart(product: Product, quantity = 1) {
+  function addToCart(product: Product, quantity = 1, selectedAddOns: SelectedAddOn[] = [], notes = "") {
+    const optionKey = selectedAddOns.map((item) => item.id).sort().join("-");
+    const cartKey = `${product.id}:${optionKey}:${notes}`;
     setCart((current) => {
-      const found = current.find((item) => item.id === product.id);
-      if (found) return current.map((item) => item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item);
-      return [...current, { ...product, quantity }];
+      const found = current.find((item) => item.cartKey === cartKey);
+      if (found) return current.map((item) => item.cartKey === cartKey ? { ...item, quantity: Math.min(20, item.quantity + quantity) } : item);
+      return [...current, { ...product, cartKey, quantity: Math.min(20, quantity), selectedAddOns, notes }];
     });
     setSelectedProduct(null);
   }
 
-  function updateQuantity(id: number, quantity: number) {
-    setCart((current) => quantity <= 0 ? current.filter((item) => item.id !== id) : current.map((item) => item.id === id ? { ...item, quantity } : item));
+  function updateQuantity(cartKey: string, quantity: number) {
+    setCart((current) => quantity <= 0 ? current.filter((item) => item.cartKey !== cartKey) : current.map((item) => item.cartKey === cartKey ? { ...item, quantity: Math.min(20, quantity) } : item));
   }
 
   useEffect(() => {
