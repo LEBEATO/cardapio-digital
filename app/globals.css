@@ -44,3 +44,12 @@ button { cursor: pointer; }
 @keyframes float { 0%,100% { transform:translateY(0) rotate(-2deg); } 50% { transform:translateY(-14px) rotate(2deg); } }
 @media (max-width:640px) { .product-image { width:104px; min-width:104px; } .hero { min-height:auto; } }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+
+.product-card { cursor: pointer; }
+.modal-backdrop { position:fixed; inset:0; z-index:80; display:flex; align-items:flex-end; justify-content:center; padding:16px; background:rgba(0,0,0,.62); backdrop-filter:blur(8px); animation:fade-in .2s ease both; }
+.product-modal { position:relative; width:min(100%,560px); max-height:90vh; overflow:auto; padding:20px; border:1px solid var(--border); border-radius:28px; background:var(--surface); box-shadow:0 30px 90px rgba(0,0,0,.42); animation:modal-up .3s cubic-bezier(.2,.8,.2,1) both; }
+.modal-close { position:absolute; right:14px; top:14px; z-index:2; width:40px; height:40px; border:1px solid var(--border); border-radius:50%; background:var(--surface); color:var(--foreground); font-size:26px; }
+.modal-food { min-height:220px; margin-bottom:18px; display:grid; place-items:center; border-radius:22px; background:radial-gradient(circle,#ffb45d,var(--surface-2) 70%); font-size:130px; }
+@keyframes fade-in { from { opacity:0; } }
+@keyframes modal-up { from { opacity:0; transform:translateY(28px) scale(.98); } }
+@media (min-width:640px) { .modal-backdrop { align-items:center; } }
