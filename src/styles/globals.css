@@ -104,3 +104,8 @@
  .categories .category-scroll{scroll-snap-type:none!important;scroll-behavior:auto!important;gap:10px}
  .categories .category-scroll>a{scroll-snap-align:none}
 }
+
+/* Desktop shows one category set; duplicated set exists only for mobile ticker */
+@media(min-width:761px){
+ .category-scroll>a[aria-hidden="true"]{display:none}
+}
