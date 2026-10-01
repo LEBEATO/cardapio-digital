@@ -99,3 +99,8 @@
  .categories .category-scroll::-webkit-scrollbar{display:none}
  .categories .category-scroll>a{flex:0 0 auto;white-space:nowrap;scroll-snap-align:start}
 }
+
+@media(max-width:760px){
+ .categories .category-scroll{scroll-snap-type:none!important;scroll-behavior:auto!important;gap:10px}
+ .categories .category-scroll>a{scroll-snap-align:none}
+}
