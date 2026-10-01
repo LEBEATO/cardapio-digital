@@ -191,3 +191,6 @@
 
 /* Hero burger must always stay fully visible */
 .burger-roll,.burger-roll.is-scrolling,.burger-roll.is-returning,.burger-roll:not(.is-scrolling):not(.is-returning){opacity:1!important;visibility:visible!important;filter:none!important}
+
+/* Footer follows the active light/dark theme */
+:root[data-theme="light"] .site-footer{background:#f1ede8;border-top-color:rgba(35,25,18,.12)}:root[data-theme="light"] .footer-logo{color:#171310}:root[data-theme="light"] .footer-logo span{color:#ff691e}:root[data-theme="light"] .footer-inner p{color:#665f59}:root[data-theme="light"] .footer-inner small{color:#746c65;border-top-color:rgba(35,25,18,.12)}:root[data-theme="light"] .footer-admin-link{color:#4d4742}:root[data-theme="light"] .footer-admin-link:hover,:root[data-theme="light"] .footer-admin-link:focus-visible{color:#e95613}:root[data-theme="dark"] .site-footer{background:rgba(10,10,10,.96)}
