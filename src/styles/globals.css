@@ -55,3 +55,5 @@
  .product-image{width:78px;min-width:78px}
  .category-scroll a{font-size:10px}
 }
+
+.menu-section{padding-top:54px;scroll-margin-top:120px}@media(max-width:760px){.menu-section{padding-top:38px;scroll-margin-top:110px}}
