@@ -179,3 +179,6 @@
 .hero,.hero-grid,.burger-stage{overflow:visible!important}.burger-stage{position:relative;z-index:8}.burger-roll{pointer-events:none}
 
 @media(max-width:760px){.burger-roll{transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y)) rotate(var(--burger-roll-r));transform-origin:center;will-change:transform}.burger-stage{z-index:8;overflow:visible!important}}
+
+/* Scroll-driven burger: no autonomous animation */
+.burger-roll{animation:none!important;transition:none!important;transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(0deg)!important}.burger-roll.is-scrolling{transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(var(--burger-roll-r,0deg))!important}.burger-roll:not(.is-scrolling){transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(0deg)!important;transition:transform .18s ease-out!important}@media(max-width:760px){.burger-roll,.burger-roll.is-scrolling,.burger-roll:not(.is-scrolling){transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(var(--burger-roll-r,0deg))!important}.burger-roll:not(.is-scrolling){--burger-roll-r:0deg;transition:transform .18s ease-out!important}}
