@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { CartItem } from "../../types/menu";
 type Props={items:CartItem[];onClose:()=>void;onQuantity:(key:string,q:number)=>void;onClear:()=>void};
-const WHATSAPP_NUMBER="5535988953079";
+const WHATSAPP_NUMBER=import.meta.env.VITE_WHATSAPP_NUMBER||"5535988953079";
 export function CartDrawer({items,onClose,onQuantity,onClear}:Props){
  const total=useMemo(()=>items.reduce((sum,item)=>sum+(item.price+item.selectedAddOns.reduce((s,a)=>s+a.price,0))*item.quantity,0),[items]);
  function finishOrder(){const lines=items.flatMap(item=>{const unit=item.price+item.selectedAddOns.reduce((s,a)=>s+a.price,0);return [`• ${item.quantity}x ${item.name} — R$ ${(unit*item.quantity).toFixed(2).replace(".",",")}`,...item.selectedAddOns.map(a=>`   + ${a.name}`),item.notes?`   Obs.: ${item.notes}`:""].filter(Boolean)});const message=["🍔 *NOVO PEDIDO — BURGER HOUSE*","",...lines,"",`*Total: R$ ${total.toFixed(2).replace(".",",")}*`].join("\n");window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`,"_blank","noopener,noreferrer")}
