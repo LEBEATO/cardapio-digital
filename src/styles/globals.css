@@ -178,4 +178,4 @@
 /* Allow the rolling burger to travel beyond the hero while following page scroll */
 .hero,.hero-grid,.burger-stage{overflow:visible!important}.burger-stage{position:relative;z-index:8}.burger-roll{pointer-events:none}
 
-@media(max-width:760px){.burger-roll{transform:translate(0,var(--burger-roll-y)) rotate(var(--burger-roll-r));transform-origin:center;will-change:transform}.burger-stage{z-index:8;overflow:visible!important}}
+@media(max-width:760px){.burger-roll{transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y)) rotate(var(--burger-roll-r));transform-origin:center;will-change:transform}.burger-stage{z-index:8;overflow:visible!important}}
