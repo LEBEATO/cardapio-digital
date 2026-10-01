@@ -2,11 +2,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Header } from "../components/layout/Header";
 import { ProductCard } from "../features/menu/ProductCard";
 import { CartDrawer } from "../features/cart/CartDrawer";
-import { products } from "../data/products";
+import { products as fallbackProducts } from "../data/products";
+import { getMenuProducts } from "../features/menu/menu.service";
 import type { CartItem, Product } from "../types/menu";
 
 export function HomePage(){
- const [dark,setDark]=useState(true); const [cart,setCart]=useState<CartItem[]>([]); const [cartOpen,setCartOpen]=useState(false); const [activeCategory,setActiveCategory]=useState("Destaques"); const categoryRefs=useRef<Record<string,HTMLAnchorElement|null>>({}); const categoryScrollRef=useRef<HTMLDivElement|null>(null);
+ const [products,setProducts]=useState<Product[]>(fallbackProducts); const [dark,setDark]=useState(true); const [cart,setCart]=useState<CartItem[]>([]); const [cartOpen,setCartOpen]=useState(false); const [activeCategory,setActiveCategory]=useState("Destaques"); const categoryRefs=useRef<Record<string,HTMLAnchorElement|null>>({}); const categoryScrollRef=useRef<HTMLDivElement|null>(null);
+ useEffect(()=>{let mounted=true;getMenuProducts().then(data=>{if(mounted&&data.length)setProducts(data)}).catch(()=>{});return()=>{mounted=false}},[]);
  useEffect(()=>{const saved=localStorage.getItem("theme");const next=saved?saved==="dark":matchMedia("(prefers-color-scheme: dark)").matches;setDark(next)},[]);
  useEffect(()=>{document.documentElement.dataset.theme=dark?"dark":"light";localStorage.setItem("theme",dark?"dark":"light")},[dark]);
  const count=useMemo(()=>cart.reduce((s,i)=>s+i.quantity,0),[cart]);
