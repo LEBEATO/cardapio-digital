@@ -120,3 +120,20 @@
    overflow:hidden;
  }
 }
+
+/* Desktop ticker: animate the single visible category row between menu edges */
+@media(min-width:761px){
+ .categories{overflow:hidden}
+ .categories .category-scroll{
+   position:relative;
+   animation:desktop-category-glide 8s ease-in-out infinite alternate;
+   will-change:transform;
+ }
+}
+@keyframes desktop-category-glide{
+ from{transform:translateX(0)}
+ to{transform:translateX(min(18vw,180px))}
+}
+@media(prefers-reduced-motion:reduce){
+ .categories .category-scroll{animation:none!important}
+}
