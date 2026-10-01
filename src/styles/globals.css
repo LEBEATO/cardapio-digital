@@ -182,3 +182,6 @@
 
 /* Scroll-driven burger: no autonomous animation */
 .burger-roll{animation:none!important;transition:none!important;transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(0deg)!important}.burger-roll.is-scrolling{transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(var(--burger-roll-r,0deg))!important}.burger-roll:not(.is-scrolling){transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(0deg)!important;transition:transform .18s ease-out!important}@media(max-width:760px){.burger-roll,.burger-roll.is-scrolling,.burger-roll:not(.is-scrolling){transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(var(--burger-roll-r,0deg))!important}.burger-roll:not(.is-scrolling){--burger-roll-r:0deg;transition:transform .18s ease-out!important}}
+
+/* Keep the burger parked at its scroll position without blocking menu choices */
+.burger-roll:not(.is-scrolling){transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(var(--burger-roll-r,0deg))!important;transition:none!important;opacity:.16;filter:grayscale(.15);z-index:0}.burger-roll.is-scrolling{opacity:1;filter:none;z-index:3}.burger-roll{pointer-events:none!important}
