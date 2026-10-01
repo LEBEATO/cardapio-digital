@@ -188,3 +188,6 @@
 
 /* Burger rests normally in hero and returns home after scroll */
 .burger-roll{opacity:1!important;filter:none!important;pointer-events:none!important;animation:none!important;transform:translate(0,0) rotate(0deg)!important}.burger-roll.is-scrolling{transform:translate(var(--burger-roll-x,0px),var(--burger-roll-y,0px)) rotate(var(--burger-roll-r,0deg))!important;transition:none!important}.burger-roll.is-returning{transform:translate(0,0) rotate(0deg)!important;transition:transform .48s cubic-bezier(.22,.8,.3,1)!important}.burger-roll:not(.is-scrolling):not(.is-returning){transform:translate(0,0) rotate(0deg)!important;opacity:1!important;filter:none!important}
+
+/* Hero burger must always stay fully visible */
+.burger-roll,.burger-roll.is-scrolling,.burger-roll.is-returning,.burger-roll:not(.is-scrolling):not(.is-returning){opacity:1!important;visibility:visible!important;filter:none!important}
