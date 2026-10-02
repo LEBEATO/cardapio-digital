@@ -194,3 +194,6 @@
 
 /* Footer follows the active light/dark theme */
 :root[data-theme="light"] .site-footer{background:#f1ede8;border-top-color:rgba(35,25,18,.12)}:root[data-theme="light"] .footer-logo{color:#171310}:root[data-theme="light"] .footer-logo span{color:#ff691e}:root[data-theme="light"] .footer-inner p{color:#665f59}:root[data-theme="light"] .footer-inner small{color:#746c65;border-top-color:rgba(35,25,18,.12)}:root[data-theme="light"] .footer-admin-link{color:#4d4742}:root[data-theme="light"] .footer-admin-link:hover,:root[data-theme="light"] .footer-admin-link:focus-visible{color:#e95613}:root[data-theme="dark"] .site-footer{background:rgba(10,10,10,.96)}
+
+/* Softer return to the hero after scrolling stops */
+.burger-roll.is-returning{transition:transform .9s cubic-bezier(.22,.72,.22,1)!important}
