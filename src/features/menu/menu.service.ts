@@ -6,11 +6,11 @@ type DbProduct={id:number;name:string;description:string;price:number;fallback_e
 
 export async function getMenuProducts():Promise<Product[]>{
  if(!supabase) return [];
- const {data,error}=await supabase.from("products").select("id,name,description,price,fallback_emoji,tag,image_path,categories(name),product_addons(id,name,price)").eq("active",true).order("sort_order");
+ const client=supabase;\n if(!client) return [];\n const {data,error}=await client.from("products").select("id,name,description,price,fallback_emoji,tag,image_path,categories(name),product_addons(id,name,price)").eq("active",true).order("sort_order");
  if(error) throw error;
  return ((data??[]) as unknown as DbProduct[]).map(p=>({
    id:p.id,name:p.name,description:p.description,price:Number(p.price),emoji:p.fallback_emoji||"🍔",tag:p.tag??"",category:p.categories?.name??"Outros",
-   imageUrl:p.image_path?supabase.storage.from("product-images").getPublicUrl(p.image_path).data.publicUrl:undefined,
+   imageUrl:p.image_path?client.storage.from("product-images").getPublicUrl(p.image_path).data.publicUrl:undefined,
    addOns:(p.product_addons??[]).map(a=>({id:String(a.id),name:a.name,price:Number(a.price)}))
  }));
 }
