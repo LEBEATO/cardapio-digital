@@ -13,6 +13,9 @@ const optionalUrl=z.string().trim().refine(v=>v===""||/^https:\/\//i.test(v),"Us
 
 export const storeSettingsSchema=z.object({
  store_name:z.string().trim().min(2,"Informe o nome do estabelecimento.").max(120),
+ description:z.string().trim().max(240,"A descrição deve ter no máximo 240 caracteres.").nullable().optional(),
+ logo_path:z.string().nullable().optional(),
+ share_image_path:z.string().nullable().optional(),
  whatsapp:z.string().transform(v=>v.replace(/\D/g,"")).pipe(z.string().regex(/^\d{10,15}$/,"WhatsApp inválido.")),
  instagram_url:optionalUrl.nullable().optional(),
  facebook_url:optionalUrl.nullable().optional(),
