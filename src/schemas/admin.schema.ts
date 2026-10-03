@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const moneyString=z.string().trim().min(1,"Informe o preço.").transform(v=>v.replace(/\s/g,"").replace(/\.(?=\d{3}(?:\D|$))/g,"").replace(",",".")).pipe(z.coerce.number().min(0,"Preço inválido.").max(99999.99,"Preço muito alto."));
+const moneyString=z.string().trim().min(1,"Informe o preço.").transform(v=>Number(v.replace(/\s/g,"").replace(/\.(?=\d{3}(?:\D|$))/g,"").replace(",","."))).refine(v=>Number.isFinite(v)&&v>=0&&v<=99999.99,"Preço inválido.");
 
 export const productFormSchema=z.object({
  name:z.string().trim().min(2,"Informe o nome do produto.").max(120,"Nome muito longo."),
