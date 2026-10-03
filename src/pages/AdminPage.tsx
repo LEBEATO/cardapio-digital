@@ -5,6 +5,7 @@ import { productFormSchema,storeSettingsSchema } from "../schemas/admin.schema";
 
 export function AdminPage(){
  const navigate=useNavigate();
+ const client=supabase;
  async function exitAdmin(){if(supabase)await supabase.auth.signOut();navigate("/");}
  const [session,setSession]=useState<any>(null),[isAdmin,setIsAdmin]=useState(false),[email,setEmail]=useState(""),[password,setPassword]=useState(""),[msg,setMsg]=useState("");
  const [name,setName]=useState(""),[description,setDescription]=useState(""),[price,setPrice]=useState(""),[categoryId,setCategoryId]=useState(""),[image,setImage]=useState<File|null>(null),[preview,setPreview]=useState(""),[cats,setCats]=useState<any[]>([]),[adminProducts,setAdminProducts]=useState<any[]>([]),[editingId,setEditingId]=useState<number|null>(null),[store,setStore]=useState({store_name:"BurgerHouse",whatsapp:"",instagram_url:"",facebook_url:"",address:"",opening_hours:"",is_open:true});
